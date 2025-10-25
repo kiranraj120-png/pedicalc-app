@@ -5,96 +5,295 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Medical Infusion Rate Calculator</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    :root{
-      --bg-primary:#ffffff;
-      --bg-secondary:#fff8e1;
-      --bg-card:#ffffff;
-      --text-primary:#121212;
-      --text-secondary:#546e7a;
-      --text-tertiary:#b0bec5;
-      --border-color:#e1f5fe;
-      --shadow:0 8px 20px rgba(0,0,0,0.1);
-      --shadow-hover:0 10px 25px rgba(0,0,0,0.15);
-      --primary-accent:#0089f0;
-      --caution-color:#ffeb3b;
-      --reversal:#ff1744;
-      --analgesic:#00c853;
-      --infusion:#009688;
-      --radius-card:16px;
-      --radius-input:10px;
+    /* ---------------------------------------------------------------------- */
+    /* CSS from Mem.html to define the look and feel */
+    /* ---------------------------------------------------------------------- */
+    :root {
+      /* New Modern Color Palette (Light Mode) */
+      --primary-accent: #6366f1; /* Indigo 500 */
+      --primary-accent-dark: #4338ca; /* Indigo 700 */
+      --primary-accent-light: rgba(99, 102, 241, 0.2); /* Indigo 500 w/ alpha */
+
+      --bg-primary: #f9fafb; /* Slate 50 */
+      --bg-secondary: #ffffff; /* White */
+      --bg-card: #ffffff; /* White */
+      
+      --text-primary: #111827; /* Slate 900 */
+      --text-secondary: #4b5563; /* Slate 600 */
+      --text-tertiary: #9ca3af; /* Slate 400 */
+      
+      --border-color: #e5e7eb; /* Slate 200 */
+      
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --shadow-hover: var(--shadow-lg);
+
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.3);
+
+      /* Updated Drug Category Colors (Reused as needed) */
+      --induction: #10b981; /* Emerald 500 */
+      --muscle-relaxant: #f59e0b; /* Amber 500 */
+      --analgesic: #3b82f6; /* Blue 500 */
+      --adjunct: #8b5cf6; /* Violet 500 */
+      --reversal: #ef4444; /* Red 500 */
+      --emergency: #f97316; /* Orange 500 */
+      --steroid: #6366f1; /* Indigo 500 (same as primary) */
+      --antiemetic: #84cc16; /* Lime 500 */
+      --local-anesthetic: #d946ef; /* Fuchsia 500 */
+      --infusion: #06b6d4; /* Cyan 500 */
+      --antibiotic: #78716c; /* Stone 500 */
+      
+      --caution-color: #f59e0b; /* Amber 500 */
+      --reset-color: #ef4444; /* Red 500 */
+
+      --radius-card: 12px;
+      --radius-input: 8px;
+      --radius-tab: 8px;
+      
+      --anim-bezier: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    body.dark-mode{
-      --bg-primary:#000000;
-      --bg-secondary:#111111;
-      --bg-card:#222222;
-      --text-primary:#f5f5f5;
-      --text-secondary:#bbbbbb;
-      --border-color:#4a4a4a;
-      --shadow:0 8px 20px rgba(0,0,0,0.6);
-      --shadow-hover:0 10px 25px rgba(0,0,0,0.8);
-      --caution-color:#fbc02d;
+    body.dark-mode {
+      /* New Modern Color Palette (Dark Mode) */
+      --primary-accent: #818cf8; /* Indigo 400 */
+      --primary-accent-dark: #6366f1; /* Indigo 500 */
+      --primary-accent-light: rgba(129, 140, 248, 0.2); /* Indigo 400 w/ alpha */
+
+      --bg-primary: #111827; /* Slate 900 */
+      --bg-secondary: #1f2937; /* Slate 800 */
+      --bg-card: #1f2937; /* Slate 800 */
+      
+      --text-primary: #f9fafb; /* Slate 50 */
+      --text-secondary: #9ca3af; /* Slate 400 */
+      --text-tertiary: #6b7280; /* Slate 500 */
+      
+      --border-color: #374151; /* Slate 700 */
+
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+      --shadow-hover: var(--shadow-lg);
+      
+      --glass-bg: rgba(31, 41, 55, 0.7); /* Slate 800 w/ alpha */
+      --glass-border: rgba(255, 255, 255, 0.1);
+
+      /* Drug colors can be the same, they pop nicely on dark */
+      --caution-color: #fcd34d; /* Amber 300 */
+      --reset-color: #f87171; /* Red 400 */
+      --emergency: #fbbf24; /* Amber 400 */
     }
 
-    /* Reset & base */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{
-      font-family:'Montserrat',sans-serif;
-      background:var(--bg-secondary);
-      color:var(--text-primary);
-      line-height:1.5;
-      font-size:0.9rem;
-      transition:background-color .4s,color .4s;
-      user-select:none;
-      -webkit-font-smoothing:antialiased;
-      height:100%;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      /* FIX: Remove tap highlight on all elements */
+      -webkit-tap-highlight-color: transparent; 
     }
-    input,textarea,select{user-select:text!important}
 
-    .container{max-width:1200px;margin:0 auto;padding:15px 10px;min-height:100vh}
+    html {
+        scroll-behavior: smooth;
+    }
 
-    /* Header */
-    header{
-      background:var(--primary-accent);
-      color:var(--bg-primary);
-      padding:15px;
-      border-radius:var(--radius-card);
-      box-shadow:var(--shadow);
-      margin-bottom:15px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
+    body {
+      font-family: 'Poppins', sans-serif; /* New Font */
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 0.9rem;
+      transition: background-color 0.4s var(--anim-bezier), color 0.4s var(--anim-bezier);
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    input, textarea, select {
+      user-select: text !important;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 15px 10px;
+      /* Add page load animation */
+      animation: containerFadeIn 0.5s ease-out;
+    }
+
+    @keyframes containerFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-accent), var(--primary-accent-dark));
+      color: white;
+      padding: 15px;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-    }
-    h1{font-size:1.6em;font-weight:700}
-    .dark-mode-toggle{
-      background:var(--bg-primary);
-      color:var(--primary-accent);
-      border:none;border-radius:50px;padding:8px 16px;
-      cursor:pointer;font-size:.75em;font-weight:600;
-      box-shadow:0 2px 5px rgba(0,0,0,.2);transition:all .18s ease;
-      -webkit-tap-highlight-color:transparent;
-      outline:none;
-    }
-    .dark-mode-toggle:active{transform:translateY(1px)}
-    .dark-mode-toggle::-moz-focus-inner{border:0}
-
-    /* Sections */
-    .section{
-      background:var(--bg-card);
-      padding:15px;border-radius:var(--radius-card);
-      box-shadow:var(--shadow);margin-bottom:15px;transition:box-shadow .3s ease;
-    }
-    .section h2{
-      font-size:1.3em;font-weight:600;margin-bottom:12px;color:var(--text-primary);
-      border-bottom:2px solid var(--border-color);padding-bottom:6px;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Info boxes */
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+      transform: rotate(30deg);
+      animation: shimmer 5s infinite;
+    }
+    
+    @keyframes shimmer {
+        0% { transform: translate(-30%, -30%) rotate(30deg); }
+        100% { transform: translate(30%, 30%) rotate(30deg); }
+    }
+
+    h1 {
+      font-size: 1.6em;
+      font-weight: 700;
+      z-index: 1;
+    }
+
+    .dark-mode-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: .75em;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+      transition: all .25s var(--anim-bezier);
+      outline: none;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Center content */
+      gap: 8px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      
+      /* FIX: Prevent jiggling by setting a min-width */
+      min-width: 120px; 
+      overflow: hidden;
+    }
+
+    .dark-mode-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+    }
+
+    .dark-mode-toggle:active {
+      transform: translateY(0px);
+    }
+    
+    .dark-mode-toggle i {
+        /* Animation for icon */
+        transition: transform 0.4s var(--anim-bezier);
+    }
+    
+    body.dark-mode .dark-mode-toggle i {
+        /* Rotate icon in dark mode */
+        transform: rotate(180deg);
+    }
+
+
+    .section {
+      background: var(--bg-card);
+      padding: 15px;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-md);
+      margin-bottom: 15px;
+      transition: box-shadow .3s var(--anim-bezier), transform 0.3s var(--anim-bezier);
+      border: 1px solid var(--border-color);
+    }
+
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .section h2 {
+      font-size: 1.3em;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section h2 i {
+      color: var(--primary-accent);
+    }
+
+
+    .warning {
+      background: #fffbeb; /* Amber 50 */
+      border-left: 5px solid #f59e0b; /* Amber 500 */
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.8em;
+      color: #b45309; /* Amber 700 */
+      font-weight: 500;
+      margin-bottom: 15px; /* Added spacing */
+      box-shadow: var(--shadow);
+    }
+
+    body.dark-mode .warning {
+      background: #451a03; /* Amber 900 */
+      color: #fcd34d; /* Amber 300 */
+      border-left: 5px solid #f59e0b; /* Amber 500 */
+    }
+
+    .input-field label {
+      font-size: .8em;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+      font-weight: 600;
+      display: block;
+    }
+
+    .input-field input, .input-field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-input);
+      font-size: .9em;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: border-color .3s var(--anim-bezier), box-shadow .3s var(--anim-bezier);
+      /* Override any specific Inf.html styles */
+      appearance: none; /* For select consistency */
+    }
+
+    .input-field input:focus, .input-field select:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 3px var(--primary-accent-light);
+    }
+
     .info-box {
       background: var(--bg-secondary);
       border-left: 4px solid var(--primary-accent);
@@ -103,12 +302,15 @@
       border-radius: 8px;
       font-size: 0.85em;
       color: var(--text-secondary);
-    }
-    .info-box strong {
-      color: var(--primary-accent);
+      border: 1px solid var(--border-color); /* Added border for definition */
     }
 
-    /* Calculator cards */
+    .info-box strong {
+      color: var(--primary-accent);
+      font-weight: 600;
+    }
+
+    /* Calculator cards - adopting drug-card style */
     .calculator-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -118,21 +320,34 @@
 
     @media (min-width: 768px) {
       .calculator-grid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 15px;
+      }
+      .container {
+        padding: 20px 15px;
+      }
+      h1 {
+        font-size: 2em;
+      }
+      .section h2 {
+        font-size: 1.5em;
       }
     }
 
     .calculator-card {
-      background: var(--bg-secondary);
       border-radius: var(--radius-card);
       padding: 15px;
       border-left: 6px solid var(--infusion);
-      transition: all 0.3s ease;
+      background: var(--bg-secondary);
+      transition: all .35s var(--anim-bezier);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
     }
 
     .calculator-card:hover {
       box-shadow: var(--shadow-hover);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      background: var(--bg-card);
     }
 
     .calculator-title {
@@ -145,10 +360,12 @@
     }
 
     .calculator-title::before {
-      content: "▶";
-      margin-right: 8px;
-      font-size: 0.8em;
-      color: var(--infusion);
+      content: none; /* Remove Inf.html custom marker */
+    }
+    
+    .calculator-title i {
+        color: var(--infusion);
+        margin-right: 8px;
     }
 
     /* Input groups */
@@ -157,52 +374,23 @@
       flex-direction: column;
       gap: 12px;
     }
-
-    .input-field {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .input-field label {
-      font-size: 0.8em;
-      color: var(--text-secondary);
-      margin-bottom: 5px;
-      font-weight: 600;
-      display: block;
-    }
-
-    .input-field input, .input-field select {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-input);
-      font-size: 0.9em;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    .input-field input:focus, .input-field select:focus {
-      outline: none;
-      border-color: var(--primary-accent);
-      box-shadow: 0 0 0 3px rgba(0,137,240,.2);
-    }
-
+    
     /* Results */
     .calculation-result {
-      background: var(--bg-card);
-      padding: 12px;
+      background: var(--bg-primary); /* Use primary bg for contrast */
+      padding: 10px;
       border-radius: var(--radius-input);
       margin-top: 12px;
       border: 1px solid var(--border-color);
     }
-
+    
     .result-value {
       font-weight: 800;
       font-size: 1.4em;
       color: var(--infusion);
       text-align: center;
       margin: 5px 0;
+      line-height: 1.2;
     }
 
     .result-label {
@@ -219,83 +407,112 @@
       margin-top: 5px;
       font-style: italic;
     }
-
+    
     /* Button */
     .calculate-btn {
       background: var(--primary-accent);
-      color: var(--bg-primary);
+      color: var(--bg-card);
       border: none;
       padding: 10px 15px;
-      border-radius: var(--radius-input);
+      border-radius: 50px; /* Use rounded button style from Mem.html */
       font-size: 0.9em;
       cursor: pointer;
       font-weight: 600;
       margin-top: 10px;
-      transition: all 0.3s ease;
+      transition: all 0.3s var(--anim-bezier);
       width: 100%;
+      box-shadow: var(--shadow-md);
     }
 
     .calculate-btn:hover {
-      background: #0070c0;
-      box-shadow: 0 4px 10px rgba(0,137,240,.3);
+      background: var(--primary-accent-dark);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
     }
 
-    /* Warning */
-    .warning{
-      background:#fff3cd;
-      border-left:5px solid #ffc107;
-      padding:12px;
-      margin:15px 0;
-      border-radius:8px;
-      font-size:.85em;
-      color:#856404;
-      font-weight:500;
-      box-shadow:0 1px 3px rgba(0,0,0,.05);
+    /* Utility classes for Infusion-specific reference section */
+    .reference-card-title {
+        font-size: 1.1em;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    body.dark-mode .warning{
-      background:#4a3f00;
-      color:#ffeb3b;
-      border-left:5px solid #ff9800;
+    
+    .reference-card-title i {
+        color: var(--infusion);
     }
 
-    /* Footer */
+    .reference-list div {
+        margin-bottom: 8px;
+        padding: 5px 0;
+        border-bottom: 1px dotted var(--border-color);
+    }
+    
+    .reference-list div:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+    
+    .reference-list strong {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+    
     footer {
       text-align: center;
       margin-top: 20px;
-      padding: 15px;
       font-size: 0.8em;
       color: var(--text-secondary);
+      padding: 20px 10px;
+      border-top: 1px solid var(--border-color);
     }
 
     footer a {
       color: var(--primary-accent);
       text-decoration: none;
+      font-weight: 600;
     }
+    
+    footer a:hover {
+        text-decoration: underline;
+    }
+    
+    @media (max-width: 480px) {
+        .input-field input, .input-field select {
+            padding: 8px 10px;
+            font-size: 0.85em;
+        }
+    }
+
   </style>
 </head>
 
 <body>
   <div class="container">
     <header>
-      <h1>Medical Infusion Rate Calculator</h1>
-      <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">🌙 Dark Mode</button>
+      <h1><i class="fas fa-calculator"></i> Medical Infusion Rate Calculator</h1>
+      <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i> <span>Dark Mode</span>
+      </button>
     </header>
 
     <div class="warning">
-      ⚠️ Disclaimer: This calculator is for educational and reference purposes only. Always verify calculations and use professional clinical judgment. The developers disclaim all liability for damages arising from the use of this tool.
+      <i class="fas fa-exclamation-triangle"></i> <strong>Disclaimer:</strong> This calculator is for educational and reference purposes only. Always verify calculations and use professional clinical judgment. The developers disclaim all liability for damages arising from the use of this tool.
     </div>
 
     <section class="section">
-      <h2>Infusion Rate Calculators</h2>
+      <h2><i class="fas fa-syringe"></i> Infusion Rate Calculators</h2>
       <div class="info-box">
         <strong>Quick Guide:</strong> Select the appropriate calculator based on your needs. All calculators work in real-time as you input values.
       </div>
       
       <div class="calculator-grid">
         
-        <!-- Rate Calculator -->
         <div class="calculator-card">
-          <div class="calculator-title">Rate Calculator (mL/hr & gtts/min)</div>
+          <div class="calculator-title"><i class="fas fa-tachometer-alt"></i> Rate Calculator (mL/hr & gtts/min)</div>
           <div class="input-group">
             <div class="input-field">
               <label for="total-volume">Total Volume (mL)</label>
@@ -332,9 +549,8 @@
           </div>
         </div>
 
-        <!-- Dose-Based Calculator -->
         <div class="calculator-card">
-          <div class="calculator-title">Dose-Based Rate Calculator</div>
+          <div class="calculator-title"><i class="fas fa-pills"></i> Dose-Based Rate Calculator</div>
           <div class="input-group">
             <div class="input-field">
               <label for="desired-dose">Desired Dose</label>
@@ -368,9 +584,9 @@
                   <option value="g">g</option>
                   <option value="units">units</option>
                 </select>
-                <span style="color: var(--text-secondary);">in</span>
+                <span style="color: var(--text-secondary); font-size: 0.9em;">in</span>
                 <input type="number" id="med-volume" placeholder="Volume" step="0.1" min="0" oninput="calculateDoseRate()" style="flex: 1;">
-                <span style="color: var(--text-secondary);">mL</span>
+                <span style="color: var(--text-secondary); font-size: 0.9em;">mL</span>
               </div>
             </div>
           </div>
@@ -382,9 +598,8 @@
           </div>
         </div>
 
-        <!-- Duration Calculator -->
         <div class="calculator-card">
-          <div class="calculator-title">Duration Calculator</div>
+          <div class="calculator-title"><i class="fas fa-clock"></i> Duration Calculator</div>
           <div class="input-group">
             <div class="input-field">
               <label for="duration-volume">Total Volume (mL)</label>
@@ -404,9 +619,8 @@
           </div>
         </div>
 
-        <!-- Volume Calculator -->
         <div class="calculator-card">
-          <div class="calculator-title">Volume Calculator</div>
+          <div class="calculator-title"><i class="fas fa-flask"></i> Volume Calculator</div>
           <div class="input-group">
             <div class="input-field">
               <label for="volume-rate">Infusion Rate (mL/hr)</label>
@@ -433,38 +647,38 @@
     </section>
 
     <section class="section">
-      <h2>Common Infusion Medications</h2>
+      <h2><i class="fas fa-prescription"></i> Common Infusion Medications Reference</h2>
       <div class="info-box">
         <strong>Reference:</strong> Standard concentrations for common IV infusions. Always verify with your institution's protocols.
       </div>
       
       <div class="calculator-grid">
         <div class="calculator-card">
-          <div class="calculator-title">Vasoactive Drugs</div>
-          <div style="font-size: 0.8em; color: var(--text-secondary);">
-            <div style="margin-bottom: 8px;"><strong>Noradrenaline:</strong> 4 mg in 50 mL (80 mcg/mL)</div>
-            <div style="margin-bottom: 8px;"><strong>Adrenaline:</strong> 4 mg in 50 mL (80 mcg/mL)</div>
-            <div style="margin-bottom: 8px;"><strong>Dopamine:</strong> 400 mg in 250 mL (1600 mcg/mL)</div>
+          <div class="reference-card-title"><i class="fas fa-heartbeat"></i> Vasoactive Drugs</div>
+          <div class="reference-list" style="font-size: 0.85em; color: var(--text-secondary);">
+            <div><strong>Noradrenaline:</strong> 4 mg in 50 mL (80 mcg/mL)</div>
+            <div><strong>Adrenaline:</strong> 4 mg in 50 mL (80 mcg/mL)</div>
+            <div><strong>Dopamine:</strong> 400 mg in 250 mL (1600 mcg/mL)</div>
             <div><strong>Dobutamine:</strong> 500 mg in 250 mL (2000 mcg/mL)</div>
           </div>
         </div>
         
         <div class="calculator-card">
-          <div class="calculator-title">Sedatives & Analgesics</div>
-          <div style="font-size: 0.8em; color: var(--text-secondary);">
-            <div style="margin-bottom: 8px;"><strong>Propofol:</strong> 500 mg in 50 mL (10 mg/mL)</div>
-            <div style="margin-bottom: 8px;"><strong>Midazolam:</strong> 50 mg in 50 mL (1 mg/mL)</div>
-            <div style="margin-bottom: 8px;"><strong>Fentanyl:</strong> 1000 mcg in 50 mL (20 mcg/mL)</div>
+          <div class="reference-card-title"><i class="fas fa-bed"></i> Sedatives & Analgesics</div>
+          <div class="reference-list" style="font-size: 0.85em; color: var(--text-secondary);">
+            <div><strong>Propofol:</strong> 500 mg in 50 mL (10 mg/mL)</div>
+            <div><strong>Midazolam:</strong> 50 mg in 50 mL (1 mg/mL)</div>
+            <div><strong>Fentanyl:</strong> 1000 mcg in 50 mL (20 mcg/mL)</div>
             <div><strong>Morphine:</strong> 50 mg in 50 mL (1 mg/mL)</div>
           </div>
         </div>
         
         <div class="calculator-card">
-          <div class="calculator-title">Other Common Infusions</div>
-          <div style="font-size: 0.8em; color: var(--text-secondary);">
-            <div style="margin-bottom: 8px;"><strong>Insulin:</strong> 50 units in 50 mL (1 unit/mL)</div>
-            <div style="margin-bottom: 8px;"><strong>Heparin:</strong> 25,000 units in 250 mL (100 units/mL)</div>
-            <div style="margin-bottom: 8px;"><strong>Nitroglycerin:</strong> 50 mg in 250 mL (200 mcg/mL)</div>
+          <div class="reference-card-title"><i class="fas fa-first-aid"></i> Other Common Infusions</div>
+          <div class="reference-list" style="font-size: 0.85em; color: var(--text-secondary);">
+            <div><strong>Insulin:</strong> 50 units in 50 mL (1 unit/mL)</div>
+            <div><strong>Heparin:</strong> 25,000 units in 250 mL (100 units/mL)</div>
+            <div><strong>Nitroglycerin:</strong> 50 mg in 250 mL (200 mcg/mL)</div>
             <div><strong>Lidocaine:</strong> 2 g in 250 mL (8 mg/mL)</div>
           </div>
         </div>
@@ -473,7 +687,7 @@
   </div>
 
   <footer>
-    <p><a href="https://t.me/utopiccc">Ⓡ︎2025 Dr. Kiranraj</a> | Medical Infusion Rate Calculator</p>
+    <a href="https://t.me/utopiccc">Ⓡ︎2025 Dr. Kiranraj</a> | Medical Infusion Rate Calculator
   </footer>
 
   <script>
@@ -723,12 +937,25 @@
       document.getElementById('volume-note').textContent = note;
     }
 
-    // Dark mode toggle
+    // Dark mode toggle (from Mem.html for consistent visuals)
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
       const isDark = document.body.classList.contains('dark-mode');
       localStorage.setItem('darkMode', isDark);
-      document.querySelector('.dark-mode-toggle').textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+      updateDarkModeButton();
+    }
+    
+    function updateDarkModeButton() {
+      const isDark = document.body.classList.contains('dark-mode');
+      const icon = document.querySelector('.dark-mode-toggle i');
+      const text = document.querySelector('.dark-mode-toggle span');
+      if (isDark) { 
+          icon.className = 'fas fa-sun'; 
+          text.textContent = 'Light Mode'; 
+      } else { 
+          icon.className = 'fas fa-moon'; 
+          text.textContent = 'Dark Mode'; 
+      }
     }
 
     // Initialize on load
@@ -736,8 +963,8 @@
       const savedDarkMode = localStorage.getItem('darkMode') === 'true';
       if (savedDarkMode) {
         document.body.classList.add('dark-mode');
-        document.querySelector('.dark-mode-toggle').textContent = '☀️ Light Mode';
       }
+      updateDarkModeButton(); // Update button text/icon regardless
       
       // Set up initial calculations
       calculateRate();
